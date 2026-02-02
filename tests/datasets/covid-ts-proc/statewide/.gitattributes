@@ -1,2 +1,0 @@
-deaths.csv filter=lfs diff=lfs merge=lfs -text
-cases.csv filter=lfs diff=lfs merge=lfs -text
