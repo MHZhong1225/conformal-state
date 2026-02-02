@@ -1,0 +1,386 @@
+# methods.py
+import os
+import numpy as np
+import pandas as pd
+import copy
+from statsmodels.tsa.api import ExponentialSmoothing
+from statsmodels.tsa.forecasting.theta import ThetaModel
+from tqdm import tqdm
+import pdb
+import warnings
+
+"""
+    BASELINES
+"""
+
+def trailing_window(
+    scores,
+    alpha,
+    lr, # Dummy argument
+    weight_length,
+    ahead,
+    *args,
+    **kwargs
+):
+    T_test = scores.shape[0]
+    qs = np.zeros((T_test,))
+    for t in tqdm(range(T_test)):
+        t_pred = t - ahead + 1
+        if min(weight_length, t_pred) < np.ceil(1/alpha):
+            qs[t] = np.inf
+        else:
+            qs[t] = np.quantile(scores[max(t_pred-weight_length,0):t_pred], 1-alpha, method='higher')
+    results = {"method": "Trail", "q" : qs}
+    return results
+
+def aci_clipped(
+    scores,
+    alpha,
+    lr,
+    window_length,
+    T_burnin,
+    ahead,
+    *args,
+    **kwargs
+):
+    T_test = scores.shape[0]
+    alphat = alpha
+    qs = np.zeros((T_test,))
+    alphas = np.ones((T_test,)) * alpha
+    covereds = np.zeros((T_test,))
+    for t in tqdm(range(T_test)):
+        t_pred = t - ahead + 1
+        clip_value = scores[max(t_pred-window_length,0):t_pred].max() if t_pred > 0 else np.inf
+        if t_pred > T_burnin:
+            # Setup: current gradient
+            if alphat <= 1/(t_pred+1):
+                qs[t] = np.inf
+            else:
+                qs[t] = np.quantile(scores[max(t_pred-window_length,0):t_pred], 1-np.clip(alphat, 0, 1), method='higher')
+            covereds[t] = qs[t] >= scores[t]
+            grad = -alpha if covereds[t_pred] else 1-alpha
+            alphat = alphat - lr*grad
+
+            if t < T_test - 1:
+                alphas[t+1] = alphat
+        else:
+            if t_pred > np.ceil(1/alpha):
+                qs[t] = np.quantile(scores[:t_pred], 1-alpha)
+            else:
+                qs[t] = np.inf
+        if qs[t] == np.inf:
+            qs[t] = clip_value
+    results = { "method": "ACI (clipped)", "q" : qs, "alpha" : alphas}
+    return results
+
+
+def aci(
+    scores,
+    alpha,
+    lr,
+    window_length,
+    T_burnin,
+    ahead,
+    *args,
+    **kwargs
+):
+    T_test = scores.shape[0]
+    alphat = alpha
+    qs = np.zeros((T_test,))
+    alphas = np.ones((T_test,)) * alpha
+    covereds = np.zeros((T_test,))
+    for t in tqdm(range(T_test)):
+        t_pred = t - ahead + 1
+        if t_pred > T_burnin:
+            # Setup: current gradient
+            if alphat <= 1/(t_pred+1):
+                qs[t] = np.inf
+            else:
+                qs[t] = np.quantile(scores[max(t_pred-window_length,0):t_pred], 1-np.clip(alphat, 0, 1), method='higher')
+            covereds[t] = qs[t] >= scores[t]
+            grad = -alpha if covereds[t_pred] else 1-alpha
+            alphat = alphat - lr*grad
+
+            if t < T_test - 1:
+                alphas[t+1] = alphat
+        else:
+            if t_pred > np.ceil(1/alpha):
+                qs[t] = np.quantile(scores[:t_pred], 1-alpha)
+            else:
+                qs[t] = np.inf
+    results = { "method": "ACI", "q" : qs, "alpha" : alphas}
+    return results
+
+"""
+    New methods
+"""
+
+def quantile(
+    scores,
+    alpha,
+    lr,
+    ahead,
+    proportional_lr=True,
+    *args,
+    **kwargs
+):
+    T_burnin = kwargs['T_burnin']
+    results = quantile_integrator_log(scores, alpha, lr, 1.0, 0, ahead, T_burnin, proportional_lr=proportional_lr)
+    results['method'] = 'Quantile'
+    return results
+
+def mytan(x):
+    if x >= np.pi/2:
+        return np.inf
+    elif x <= -np.pi/2:
+        return -np.inf
+    else:
+        return np.tan(x)
+
+def saturation_fn_log(x, t, Csat, KI):
+    if KI == 0:
+        return 0
+    tan_out = mytan(x * np.log(t+1)/(Csat * (t+1)))
+    out = KI * tan_out
+    return  out
+
+def saturation_fn_sqrt(x, t, Csat, KI):
+    return KI * mytan((x * np.sqrt(t+1))/((Csat * (t+1))))
+
+def quantile_integrator_log(
+    scores,
+    alpha,
+    lr,
+    Csat,
+    KI,
+    ahead,
+    T_burnin,
+    proportional_lr=True,
+    *args,
+    **kwargs
+):
+    data = kwargs['data'] if 'data' in kwargs.keys() else None
+    results = quantile_integrator_log_scorecaster(scores, alpha, lr, data, T_burnin, Csat, KI, True, ahead, proportional_lr=proportional_lr, scorecast=False)
+    results['method'] = "Quantile+Integrator (log)"
+    return results
+
+
+"""
+    This is the master method for the quantile, integrator, and scorecaster methods.
+"""
+def quantile_integrator_log_scorecaster(
+    scores,
+    alpha,
+    lr,
+    data,
+    T_burnin,
+    Csat,
+    KI,
+    upper,
+    ahead,
+    integrate=True,
+    proportional_lr=True,
+    scorecast=True,
+#    onesided_integrator=False,
+    *args,
+    **kwargs
+):
+    # Initialization
+    T_test = scores.shape[0]
+    qs = np.zeros((T_test,))
+    qts = np.zeros((T_test,))
+    integrators = np.zeros((T_test,))
+    scorecasts = np.zeros((T_test,))
+    covereds = np.zeros((T_test,))
+    seasonal_period = kwargs.get('seasonal_period')
+    if seasonal_period is None:
+        seasonal_period = 1
+    # Load the scorecaster
+    try:
+        # If the data contains a scorecasts column, then use it!
+        if 'scorecasts' in data.columns:
+            scorecasts = np.array([s[int(upper)] for s in data['scorecasts'] ])
+            train_model = False
+        else:
+            scorecasts = np.load('./.cache/scorecaster/' + kwargs.get('config_name') + '_' + str(upper) + '.npy')
+            train_model = False
+    except:
+        train_model = True
+    # Run the main loop
+    # At time t, we observe y_t and make a prediction for y_{t+ahead}
+    # We also update the quantile at the next time-step, q[t+1], based on information up to and including t_pred = t - ahead + 1.
+    #lr_t = lr * (scores[:T_burnin].max() - scores[:T_burnin].min()) if proportional_lr and T_burnin > 0 else lr
+    for t in tqdm(range(T_test)):
+        t_lr = t
+        t_lr_min = max(t_lr - T_burnin, 0)
+        lr_t = lr * (scores[t_lr_min:t_lr].max() - scores[t_lr_min:t_lr].min()) if proportional_lr and t_lr > 0 else lr
+        t_pred = t - ahead + 1
+        if t_pred < 0:
+            continue # We can't make any predictions yet if our prediction time has not yet arrived
+        # First, observe y_t and calculate coverage
+        covereds[t] = qs[t] >= scores[t]
+        # Next, calculate the quantile update and saturation function
+        grad = alpha if covereds[t_pred] else -(1-alpha)
+        #integrator = saturation_fn_log((1-covereds)[T_burnin:t_pred].sum() - (t_pred-T_burnin)*alpha, (t_pred-T_burnin), Csat, KI) if t_pred > T_burnin else 0
+        integrator_arg = (1-covereds)[:t_pred].sum() - (t_pred)*alpha
+        #if onesided_integrator:
+        #    integrator_arg = np.clip(integrator_arg, 0, np.inf)
+        integrator = saturation_fn_log(integrator_arg, t_pred, Csat, KI)
+        # Train and scorecast if necessary
+        if scorecast and train_model and t_pred > T_burnin and t+ahead < T_test:
+            curr_scores = np.nan_to_num(scores[:t_pred])
+            model = ThetaModel(
+                    curr_scores.astype(float),
+                    period=seasonal_period,
+                    ).fit()
+            pred = model.forecast(ahead)          # Series, len=ahead
+            scorecasts[t+ahead] = float(np.asarray(pred)[-1])
+        # Update the next quantile
+        if t < T_test - 1:
+            qts[t+1] = qts[t] - lr_t * grad
+            integrators[t+1] = integrator if integrate else 0
+            qs[t+1] = qts[t+1] + integrators[t+1]
+            if scorecast:
+                qs[t+1] += scorecasts[t+1]
+    results = {"method": "Quantile+Integrator (log)+Scorecaster", "q" : qs}
+    if train_model and scorecast:
+        os.makedirs('./.cache/', exist_ok=True)
+        os.makedirs('./.cache/scorecaster/', exist_ok=True)
+        np.save('./.cache/scorecaster/' + kwargs.get('config_name') + '_' + str(upper) + '.npy', scorecasts)
+    return results
+
+
+from tqdm import tqdm
+import numpy as np
+from .state_space import _Kalman1D, _approx_norm_ppf, _sigmoid_stable
+
+
+def dss_cc(
+    scores,
+    alpha,
+    lr,    
+    ahead,
+    T_burnin,
+
+    q_max=10.0,
+    eps=1e-6,
+
+    # gain scheduling
+    eta_min=0.01,
+    eta_max=0.2,
+    kappa_center=3.0,
+    kappa_scale=1.0,
+
+    # kalman params
+    kf_A=1.0,
+    kf_C=1.0,
+    kf_Q=1e-3,
+    kf_R=1e-2,
+
+    # feedforward construction
+    use_var_term=True,
+    z_value=None,
+
+    proportional_eta=True,  
+    *args,
+    **kwargs
+):
+    scores = np.asarray(scores, dtype=float)
+    T = scores.shape[0]
+
+    q_max = float(q_max)
+    eps = float(eps)
+
+    eta_min = float(eta_min)
+    eta_max = float(eta_max)
+    kappa_center = float(kappa_center)
+    kappa_scale = float(kappa_scale)
+
+    def clip_q(x):
+        return float(np.clip(x, 0.0, q_max))
+
+    def schedule_eta(kappa):
+        x = (kappa - kappa_center) / max(kappa_scale, 1e-12)
+        psi = _sigmoid_stable(x)
+        return eta_min + (eta_max - eta_min) * psi
+
+    z_quant = float(_approx_norm_ppf(1.0 - alpha)) if z_value is None else float(z_value)
+
+    # outputs
+    qs = np.zeros((T,), dtype=float)        # q[t] used for coverage at time t
+    z_fb = np.zeros((T,), dtype=float)      # feedback state
+    g_ff = np.zeros((T,), dtype=float)      # feedforward used at time t
+    covereds = np.zeros((T,), dtype=float)
+    etas = np.zeros((T,), dtype=float)
+    kappas = np.zeros((T,), dtype=float)
+
+    # kalman on u_t = log(score_t + eps)
+    kf = _Kalman1D(A=kf_A, C=kf_C, Q=kf_Q, R=kf_R, mu0=0.0, P0=1.0)
+
+    # cold start threshold (like other methods: need enough samples)
+    min_needed = int(np.ceil(1.0 / alpha))
+
+    for t in tqdm(range(T)):
+        t_pred = t - ahead + 1
+        if t_pred < 0:
+            continue
+
+        # 1) coverage uses qs[t] exactly like PID baseline
+        covereds[t] = 1.0 if (qs[t] >= scores[t]) else 0.0
+
+        # 2) kalman innovation and update using current u_t
+        s = float(scores[t])
+        u = float(np.log(max(s, 0.0) + eps))
+
+        nu, S_t, kappa, _, _ = kf.innovation(u)
+        kappas[t] = float(kappa)
+
+        base_eta = schedule_eta(kappa)   # in [eta_min, eta_max]
+
+        # PID-like scaling: lr * (range of recent scores)
+        eta_t = lr * base_eta
+        if proportional_eta:
+            t_lr = t
+            t_lr_min = max(t_lr - T_burnin, 0)
+            if t_lr > 0:
+                scale = float(scores[t_lr_min:t_lr].max() - scores[t_lr_min:t_lr].min())
+                eta_t *= max(scale, 1e-12)
+        etas[t] = float(eta_t)
+
+        kf.update(u)
+
+        # 3) burn-in: before we start controlling, set q to empirical quantile (capped)
+        # IMPORTANT: only write qs[t+1], never overwrite qs[t]
+        if t < T - 1:
+            if t_pred < min_needed:
+                qs[t+1] = clip_q(q_max)  # conservative cap
+                continue
+
+        # 4) compute feedforward g_{t+1} for next step (aligned with qs[t+1])
+        mu_u_pred, S_u_pred = kf.predict_obs_next()
+        if use_var_term:
+            log_q = mu_u_pred + z_quant * np.sqrt(max(S_u_pred, 1e-12))
+        else:
+            log_q = mu_u_pred
+        g_next = float(np.exp(log_q))
+
+        # 5) feedback update uses covereds[t_pred] exactly like PID
+        cov_for_update = covereds[t_pred]
+        grad = alpha if (cov_for_update > 0.5) else -(1.0 - alpha)
+
+        if t < T - 1:
+            z_fb[t+1] = z_fb[t] - eta_t * grad
+            g_ff[t+1] = g_next
+            qs[t+1] = clip_q(z_fb[t+1] + g_ff[t+1])
+        # if t % 200 == 0 and t > 0:
+        #     print("t", t, "q_mean", qs[max(0,t-200):t].mean(), "q_min", qs[:t].min(), "q_max", qs[:t].max(),
+        #         "cvg_recent", covereds[max(0,t-200):t].mean(), "eta", etas[t])
+    return {
+        "method": "DSS-CC",
+        "q": qs,
+        "eta": etas,
+        "kappa": kappas,
+        "z": z_fb,
+        "g": g_ff,
+        "covered": covereds,
+    }
