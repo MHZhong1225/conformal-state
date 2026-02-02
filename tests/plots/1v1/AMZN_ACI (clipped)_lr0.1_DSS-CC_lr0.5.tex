@@ -1,0 +1,14 @@
+\begin{tabular}{lllllllll}
+\toprule
+& \multicolumn{2}{c}{AR}& \multicolumn{2}{c}{Prophet}& \multicolumn{2}{c}{Theta}& \multicolumn{2}{c}{Transformer} \\
+& ACI (clipped) & Ours & ACI (clipped) & Ours & ACI (clipped) & Ours & ACI (clipped) & Ours \\
+\midrule
+Marginal coverage & 0.898 & 0.897 & 0.884 & 0.878 & 0.898 & 0.9 & 0.884 & 0.738 \\
+Longest err sequence & 2 & 2 & 8 & 68 & 2 & 2 & 7 & 157 \\
+Average set size & 44.9 & 27.5 & 52.6 & 58.6 & 43.3 & 28.3 & 60.5 & 68.4 \\
+Median set size & 41.8 & 18.4 & 38.8 & 35 & 27.3 & 18.8 & 36.6 & 66.1 \\
+75\% quantile set size & 58.9 & 37 & 66.9 & 84.1 & 59.5 & 36.9 & 85.5 & 100 \\
+90\% quantile set size & 93.9 & 61.1 & 137 & 200 & 94.7 & 64.7 & 148 & 100 \\
+95\% quantile set size & 136 & 76.8 & 166 & 200 & 136 & 81.3 & 182 & 103 \\
+\bottomrule
+\end{tabular}

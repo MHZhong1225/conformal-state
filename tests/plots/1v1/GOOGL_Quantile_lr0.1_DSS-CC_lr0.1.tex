@@ -1,0 +1,14 @@
+\begin{tabular}{lllllllll}
+\toprule
+& \multicolumn{2}{c}{AR}& \multicolumn{2}{c}{Prophet}& \multicolumn{2}{c}{Theta}& \multicolumn{2}{c}{Transformer} \\
+& Conformal P Control & Ours & Conformal P Control & Ours & Conformal P Control & Ours & Conformal P Control & Ours \\
+\midrule
+Marginal coverage & 0.897 & 0.897 & 0.891 & 0.624 & 0.895 & 0.813 & 0.892 & 0.158 \\
+Longest err sequence & 4 & 4 & 6 & 115 & 7 & 97 & 9 & 1.56e+03 \\
+Average set size & 21.4 & 21.5 & 58.2 & 47.5 & 30.3 & 33.3 & 98.7 & 50 \\
+Median set size & 18.2 & 18.7 & 50.3 & 50 & 27.8 & 32.3 & 72.7 & 50 \\
+75\% quantile set size & 26 & 27.2 & 75.2 & 50 & 39.9 & 50 & 123 & 50 \\
+90\% quantile set size & 33.6 & 35.4 & 98.2 & 50 & 48.6 & 50 & 204 & 50 \\
+95\% quantile set size & 41.2 & 43.3 & 116 & 50 & 55.5 & 50 & 259 & 50 \\
+\bottomrule
+\end{tabular}
