@@ -69,9 +69,10 @@ if __name__ == "__main__":
         'Trail': 'Trail',
         'ACI': 'ACI',
         'ACI (clipped)': 'ACI (clipped)',
-        'Quantile': 'Conformal P',
-        'Quantile+Integrator (log)': 'Conformal PI',
+        # 'Quantile': 'Conformal P',
+        # 'Quantile+Integrator (log)': 'Conformal PI',
         'Quantile+Integrator (log)+Scorecaster': 'Conformal PID',
+        'CPTC': 'CPTC',
         'DSS-CC': 'Ours'
     }
 
@@ -81,6 +82,11 @@ if __name__ == "__main__":
         # If results contains ACI (clipped), delete it
         if 'ACI (clipped)' in results.keys():
             del results['ACI (clipped)']
+        # Filter out Quantile and Quantile+Integrator (log) as requested
+        if 'Quantile' in results.keys():
+            del results['Quantile']
+        if 'Quantile+Integrator (log)' in results.keys():
+            del results['Quantile+Integrator (log)']
 
         plots_folder = "./plots/" + dataset_name + "/" + model_name + "/"
         os.makedirs(plots_folder, exist_ok=True)
@@ -183,7 +189,8 @@ if __name__ == "__main__":
             ncols=ncols,
             sharex=True,
             sharey=True,
-            figsize=(ncols * 10.1, nrows * 6.4)
+            figsize=(ncols * 10.1, nrows * 6.4),
+            squeeze=False
         )
 
         i = 0
@@ -221,7 +228,7 @@ if __name__ == "__main__":
 
         # Size plots (zoomed in)! Only visualize the 'upper' score, i.e., the last one in the array.
         fig, axs = plt.subplots(nrows=nrows, ncols=ncols + 1, sharex=True, sharey=True,
-                                figsize=((ncols + 1) * 10.1, nrows * 6.4))
+                                figsize=((ncols + 1) * 10.1, nrows * 6.4), squeeze=False)
 
         last = 50
         i = 1
@@ -272,7 +279,7 @@ if __name__ == "__main__":
             y_zoomed = y_vec[-last:]
 
             fig, axs = plt.subplots(nrows=nrows, ncols=ncols + 1, sharex=True, sharey=True,
-                                    figsize=((ncols + 1) * 10.1, nrows * 6.4))
+                                    figsize=((ncols + 1) * 10.1, nrows * 6.4), squeeze=False)
 
             i = 1
             y_clip_low = np.nanmin(y_zoomed) * 0.8
@@ -332,7 +339,7 @@ if __name__ == "__main__":
             y_zoomed = y_vec[T_burnin+1:]
 
             fig, axs = plt.subplots(nrows=nrows, ncols=ncols + 1, sharex=True, sharey=True,
-                                    figsize=((ncols + 1) * 10.1, nrows * 6.4))
+                                    figsize=((ncols + 1) * 10.1, nrows * 6.4), squeeze=False)
 
             i = 1
             y_clip_low = np.nanmin(y_zoomed) * 0.8

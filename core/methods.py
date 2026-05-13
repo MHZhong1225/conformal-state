@@ -384,3 +384,100 @@ def dss_cc(
         "g": g_ff,
         "covered": covereds,
     }
+
+
+def cptc(
+    scores,
+    alpha,
+    lr,
+    z_probs=None,
+    *args,
+    **kwargs
+):
+    """
+    Conformal Prediction for Time-series with Change points (CPTC)
+    Reference: https://arxiv.org/abs/2509.02844
+    
+    Args:
+        scores: (T,) non-conformity scores (e.g. absolute residuals)
+        alpha: target miscoverage rate (e.g. 0.1 for 90% coverage)
+        lr: learning rate (gamma) for online update
+        z_probs: (T, K) probability of each latent state at each time step
+    """
+    scores = np.asarray(scores, dtype=float)
+    
+    if z_probs is None:
+        # If not provided, assume single state (equivalent to ACI)
+        # Or raise error. Given usage in base_test.py, we might want to default.
+        # But base_test.py injects it into kwargs.
+        # If it comes from kwargs, it will be in z_probs argument due to **kwargs unpacking?
+        # No, if it's a named argument in the function, **kwargs in the call will populate it.
+        # But if base_test.py puts it in kwargs, and I define it as named arg, it works.
+        # If base_test.py DOES NOT put it (e.g. direct call), we handle it here.
+        if 'z_probs' in kwargs:
+             z_probs = kwargs['z_probs']
+        else:
+             # Default to single state
+             T = scores.shape[0]
+             z_probs = np.ones((T, 1))
+
+    z_probs = np.asarray(z_probs, dtype=float)
+    T = scores.shape[0]
+    K = z_probs.shape[1]
+
+    # Check alignment
+    if z_probs.shape[0] != T:
+        # If lengths differ, try to truncate or complain. 
+        # Assuming aligned for now.
+        pass
+
+    # Initialize state-specific quantiles
+    # We start with 0.0. 
+    # To speed up convergence, one could use a burn-in or heuristic, 
+    # but 0.0 is the standard "uninformed" start for ACI.
+    qs_states = np.zeros(K, dtype=float)
+    
+    # Outputs
+    qs = np.zeros(T, dtype=float)
+    covereds = np.zeros(T, dtype=float)
+    
+    # We can also track the weighted update norm or something if useful
+    
+    for t in tqdm(range(T)):
+        # 1. Form prediction for current step t using CURRENT state estimate
+        # (Assuming z_probs[t] is the predicted state distribution for time t)
+        current_q = np.dot(z_probs[t], qs_states)
+        qs[t] = current_q
+        
+        # 2. Check coverage
+        s = scores[t]
+        covered = 1.0 if s <= current_q else 0.0
+        covereds[t] = covered
+        
+        # 3. Online Update (ACI-style, weighted by state responsibility)
+        # Gradient: if not covered (s > q), we need to INCREASE q. 
+        # Target quantile is 1-alpha.
+        # Quantile regression gradient direction:
+        # If y <= q (covered): grad ~ -(1-alpha) -> decrease q
+        # If y > q (not covered): grad ~ alpha -> increase q 
+        # WAIT. ACI rule is: q <- q + lr * (err - alpha)
+        # err = 0 if covered, 1 if not.
+        # If covered: err=0 => q <- q - lr * alpha (Decrease)
+        # If not covered: err=1 => q <- q + lr * (1 - alpha) (Increase)
+        
+        err = 0.0 if covered > 0.5 else 1.0
+        update = lr * (err - alpha)
+        
+        # Distribute update to states based on their probability
+        # qs_states[k] += z_probs[t, k] * update
+        qs_states += z_probs[t] * update
+        
+        # Clip to ensure non-negative width (since scores are absolute errors)
+        qs_states = np.maximum(qs_states, 0.0)
+
+    return {
+        "method": "CPTC",
+        "q": qs,
+        "covered": covereds,
+        "qs_states": qs_states # Final state
+    }

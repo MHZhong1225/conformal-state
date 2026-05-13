@@ -4,7 +4,7 @@ import os, sys
 sys.path.insert(1, os.path.join(sys.path[0], '../'))
 import numpy as np
 import pandas as pd
-from core import standard_weighted_quantile, trailing_window, aci, aci_clipped, quantile, quantile_integrator_log, quantile_integrator_log_scorecaster,dss_cc
+from core import standard_weighted_quantile, trailing_window, aci, aci_clipped, quantile, quantile_integrator_log, quantile_integrator_log_scorecaster, dss_cc, cptc
 from core.synthetic_scores import generate_scores
 from core.model_scores import generate_forecasts
 from datasets import load_dataset
@@ -35,11 +35,11 @@ if __name__ == "__main__":
     asymmetric = False
 
     # Try reading in results
-    try:
-        with open(filename, 'rb') as handle:
-            all_results = pickle.load(handle)
-    except:
-        all_results = {}
+    # try:
+    #     with open(filename, 'rb') as handle:
+    #         all_results = pickle.load(handle)
+    # except:
+    all_results = {}
 
     for model_name in model_names:
         try:
@@ -118,8 +118,10 @@ if __name__ == "__main__":
             elif method == "DSS-CC":
                 fn = dss_cc
                 # args['methods'][method]['lrs'] = [None]
-            else:
-                raise Exception(f"Method {method} not implemented")
+            elif method == "CPTC":
+                fn = cptc
+            # else:
+            #     raise Exception(f"Method {method} not implemented")
             lrs = args['methods'][method]['lrs']
             kwargs = args['methods'][method]
             kwargs["T_burnin"] = args["T_burnin"]
@@ -146,6 +148,14 @@ if __name__ == "__main__":
                     else:
                         stacked_scores = scores_arr.to_numpy()
                     kwargs["upper"] = True
+                    
+                    # Handle z_probs for CPTC if not present
+                    if method == "CPTC" and "z_probs" not in kwargs:
+                        # Default to single state if no z_probs provided
+                        # (Behaves like standard ACI)
+                        T = len(stacked_scores)
+                        kwargs["z_probs"] = np.ones((T, 1))
+                        
                     q = fn(stacked_scores, args["alpha"], lr, **kwargs)["q"]
 
                 if real_data:
