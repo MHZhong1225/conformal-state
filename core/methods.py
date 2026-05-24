@@ -287,6 +287,7 @@ def dss_cc(
 ):
     scores = np.asarray(scores, dtype=float)
     T = scores.shape[0]
+    horizon = max(int(ahead), 1)
 
     q_max = float(q_max)
     eps = float(eps)
@@ -304,6 +305,35 @@ def dss_cc(
         psi = _sigmoid_stable(x)
         return eta_min + (eta_max - eta_min) * psi
 
+    def empirical_quantile(end):
+        history = scores[:max(int(end), 0)]
+        history = history[np.isfinite(history)]
+        if history.size == 0:
+            return q_max
+        if history.size < min_needed:
+            return history.max()
+        return np.quantile(history, 1.0 - alpha, method="higher")
+
+    def recent_score_scale(end):
+        if not proportional_eta or end <= 0:
+            return 1.0
+        start = max(end - T_burnin, 0)
+        window = scores[start:end]
+        window = window[np.isfinite(window)]
+        if window.size <= 1:
+            return 1.0
+        return max(float(window.max() - window.min()), 1e-12)
+
+    def predict_feedforward():
+        mu_x_pred, P_x_pred = kf.predict_state_ahead(horizon)
+        mu_u_pred = kf.C * mu_x_pred
+        S_u_pred = (kf.C**2) * P_x_pred + kf.R
+        if use_var_term:
+            log_q = mu_u_pred + z_quant * np.sqrt(max(S_u_pred, 1e-12))
+        else:
+            log_q = mu_u_pred
+        return float(np.exp(log_q))
+
     z_quant = float(_approx_norm_ppf(1.0 - alpha)) if z_value is None else float(z_value)
 
     # outputs
@@ -316,6 +346,7 @@ def dss_cc(
 
     # kalman on u_t = log(score_t + eps)
     kf = _Kalman1D(A=kf_A, C=kf_C, Q=kf_Q, R=kf_R, mu0=0.0, P0=1.0)
+    use_residual_feedback = np.nanmin(scores) >= 0.0
 
     # cold start threshold (like other methods: need enough samples)
     min_needed = int(np.ceil(1.0 / alpha))
@@ -337,40 +368,33 @@ def dss_cc(
 
         base_eta = schedule_eta(kappa)   # in [eta_min, eta_max]
 
-        # PID-like scaling: lr * (range of recent scores)
-        eta_t = lr * base_eta
-        if proportional_eta:
-            t_lr = t
-            t_lr_min = max(t_lr - T_burnin, 0)
-            if t_lr > 0:
-                scale = float(scores[t_lr_min:t_lr].max() - scores[t_lr_min:t_lr].min())
-                eta_t *= max(scale, 1e-12)
+        # PID-like scaling by recent score range, matching the existing tuning.
+        eta_t = lr * base_eta * recent_score_scale(t)
         etas[t] = float(eta_t)
 
         kf.update(u)
 
-        # 3) burn-in: before we start controlling, set q to empirical quantile (capped)
-        # IMPORTANT: only write qs[t+1], never overwrite qs[t]
+        # 3) burn-in: use the empirical score scale instead of jumping to q_max.
         if t < T - 1:
             if t_pred < min_needed:
-                qs[t+1] = clip_q(q_max)  # conservative cap
+                g_ff[t+1] = clip_q(empirical_quantile(t_pred))
+                qs[t+1] = g_ff[t+1]
                 continue
 
-        # 4) compute feedforward g_{t+1} for next step (aligned with qs[t+1])
-        mu_u_pred, S_u_pred = kf.predict_obs_next()
-        if use_var_term:
-            log_q = mu_u_pred + z_quant * np.sqrt(max(S_u_pred, 1e-12))
-        else:
-            log_q = mu_u_pred
-        g_next = float(np.exp(log_q))
+        # 4) compute feedforward for the configured forecast horizon.
+        g_next = predict_feedforward()
 
-        # 5) feedback update uses covereds[t_pred] exactly like PID
-        cov_for_update = covereds[t_pred]
-        grad = alpha if (cov_for_update > 0.5) else -(1.0 - alpha)
+        # 5) feedback controls residuals for nonnegative scores. Signed residual
+        # scores can be negative, so they keep the original coverage feedback.
+        if use_residual_feedback:
+            update_hit = 1.0 if (scores[t_pred] - g_ff[t_pred] <= z_fb[t_pred]) else 0.0
+        else:
+            update_hit = covereds[t_pred]
+        grad = alpha if (update_hit > 0.5) else -(1.0 - alpha)
 
         if t < T - 1:
             z_fb[t+1] = z_fb[t] - eta_t * grad
-            g_ff[t+1] = g_next
+            g_ff[t+1] = clip_q(g_next)
             qs[t+1] = clip_q(z_fb[t+1] + g_ff[t+1])
         # if t % 200 == 0 and t > 0:
         #     print("t", t, "q_mean", qs[max(0,t-200):t].mean(), "q_min", qs[:t].min(), "q_max", qs[:t].max(),

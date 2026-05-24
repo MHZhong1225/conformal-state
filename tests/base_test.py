@@ -8,7 +8,6 @@ from core import standard_weighted_quantile, trailing_window, aci, aci_clipped, 
 from core.synthetic_scores import generate_scores
 from core.model_scores import generate_forecasts
 from datasets import load_dataset
-from darts import TimeSeries
 import yaml
 import pickle
 import pdb
@@ -34,12 +33,12 @@ if __name__ == "__main__":
     minsize = args['minsize'] if real_data and 'minsize' in args.keys() else 0
     asymmetric = False
 
-    # Try reading in results
-    # try:
-    #     with open(filename, 'rb') as handle:
-    #         all_results = pickle.load(handle)
-    # except:
-    all_results = {}
+    # Try reading in results so an overwrite list can refresh selected methods.
+    try:
+        with open(filename, 'rb') as handle:
+            all_results = pickle.load(handle)
+    except FileNotFoundError:
+        all_results = {}
 
     for model_name in model_names:
         try:

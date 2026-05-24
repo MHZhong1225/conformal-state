@@ -4,11 +4,6 @@ import torch
 import pandas as pd
 import warnings
 from .ar import generate_process
-from darts.models.forecasting.prophet_model import Prophet
-from darts.models.forecasting.arima import ARIMA
-from darts.models.forecasting.theta import Theta
-from darts.models.forecasting.transformer_model import TransformerModel
-from darts import TimeSeries
 import pdb
 from tqdm import tqdm
 """
@@ -32,6 +27,12 @@ def generate_forecasts(
             return forecasts
         except:
             pass
+    from darts.models.forecasting.prophet_model import Prophet
+    from darts.models.forecasting.arima import ARIMA
+    from darts.models.forecasting.theta import Theta
+    from darts.models.forecasting.transformer_model import TransformerModel
+    from darts import TimeSeries
+
     T = data.shape[0]
     forecasts = np.zeros((T,))
     data2 = copy.deepcopy(data)
