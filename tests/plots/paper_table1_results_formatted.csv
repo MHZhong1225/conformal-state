@@ -1,0 +1,149 @@
+数据集,基础模型,方法,目标,覆盖率,覆盖误差,区间大小/阈值,学习率
+AMZN,transformer,Trail,0.900,0.700,0.200,55.354,
+AMZN,transformer,ACI,0.900,0.903,0.003,Inf,0.1
+AMZN,transformer,ACI (clipped),0.900,0.891,0.009,104.083,0.01
+AMZN,transformer,Quantile,0.900,0.901,0.001,92.694,1
+AMZN,transformer,PID,0.900,0.899,0.001,92.204,1
+AMZN,transformer,CPTC,0.900,0.494,0.406,57.267,0.1
+AMZN,transformer,DSS-CC,0.900,0.917,0.017,89.047,0.01
+AMZN,ar,Trail,0.900,0.881,0.019,15.850,
+AMZN,ar,ACI,0.900,0.900,0.000,Inf,0.1
+AMZN,ar,ACI (clipped),0.900,0.899,0.001,34.464,0.05
+AMZN,ar,Quantile,0.900,0.899,0.001,43.250,1
+AMZN,ar,PID,0.900,0.898,0.002,67.025,1
+AMZN,ar,CPTC,0.900,0.825,0.075,11.703,0.1
+AMZN,ar,DSS-CC,0.900,0.897,0.003,27.599,1
+AMZN,theta,Trail,0.900,0.878,0.022,16.000,
+AMZN,theta,ACI,0.900,0.900,0.000,Inf,0.1
+AMZN,theta,ACI (clipped),0.900,0.898,0.002,33.999,0.05
+AMZN,theta,Quantile,0.900,0.898,0.002,42.966,1
+AMZN,theta,PID,0.900,0.897,0.003,64.012,1
+AMZN,theta,CPTC,0.900,0.820,0.080,11.698,0.1
+AMZN,theta,DSS-CC,0.900,0.901,0.001,28.547,1
+AMZN,prophet,Trail,0.900,0.731,0.169,44.684,
+AMZN,prophet,ACI,0.900,0.901,0.001,Inf,0.1
+AMZN,prophet,ACI (clipped),0.900,0.894,0.006,68.430,0.005
+AMZN,prophet,Quantile,0.900,0.903,0.003,72.221,1
+AMZN,prophet,PID,0.900,0.901,0.001,79.172,1
+AMZN,prophet,CPTC,0.900,0.580,0.320,41.269,0.1
+AMZN,prophet,DSS-CC,0.900,0.912,0.012,53.478,0.05
+GOOGL,theta,Trail,0.900,0.843,0.057,28.141,
+GOOGL,theta,ACI,0.900,0.901,0.001,Inf,0.1
+GOOGL,theta,Quantile,0.900,0.898,0.002,39.386,0.5
+GOOGL,theta,PID,0.900,0.899,0.001,49.926,0.5
+GOOGL,theta,CPTC,0.900,0.750,0.150,33.728,0.1
+GOOGL,theta,DSS-CC,0.900,0.905,0.005,33.465,0.01
+GOOGL,ar,Trail,0.900,0.877,0.023,18.909,
+GOOGL,ar,ACI,0.900,0.900,0.000,Inf,0.1
+GOOGL,ar,Quantile,0.900,0.900,0.000,34.230,0.5
+GOOGL,ar,PID,0.900,0.898,0.002,45.309,0.5
+GOOGL,ar,CPTC,0.900,0.838,0.062,15.651,0.1
+GOOGL,ar,DSS-CC,0.900,0.900,0.000,32.902,1
+GOOGL,transformer,Trail,0.900,0.684,0.216,70.202,
+GOOGL,transformer,ACI,0.900,0.904,0.004,Inf,0.1
+GOOGL,transformer,Quantile,0.900,0.898,0.002,150.564,0.05
+GOOGL,transformer,PID,0.900,0.897,0.003,77.944,0.5
+GOOGL,transformer,CPTC,0.900,0.230,0.670,98.702,0.1
+GOOGL,transformer,DSS-CC,0.900,0.959,0.059,196.790,1
+GOOGL,prophet,Trail,0.900,0.742,0.158,52.528,
+GOOGL,prophet,ACI,0.900,0.900,0.000,Inf,0.01
+GOOGL,prophet,Quantile,0.900,0.898,0.002,50.996,0.5
+GOOGL,prophet,PID,0.900,0.899,0.001,58.235,0.5
+GOOGL,prophet,CPTC,0.900,0.600,0.300,50.920,0.1
+GOOGL,prophet,DSS-CC,0.900,0.918,0.018,58.438,0.01
+MSFT,theta,Trail,0.900,0.850,0.050,2.150,
+MSFT,theta,ACI,0.900,0.900,0.000,Inf,0.1
+MSFT,theta,Quantile,0.900,0.900,0.000,2.638,0.05
+MSFT,theta,PID,0.900,0.900,0.000,6.146,1
+MSFT,theta,CPTC,0.900,0.894,0.006,3.140,0.1
+MSFT,theta,DSS-CC,0.900,0.903,0.003,2.571,0.01
+MSFT,ar,Trail,0.900,0.875,0.025,1.551,
+MSFT,ar,ACI,0.900,0.900,0.000,Inf,0.1
+MSFT,ar,Quantile,0.900,0.900,0.000,4.171,1
+MSFT,ar,PID,0.900,0.900,0.000,5.854,1
+MSFT,ar,CPTC,0.900,0.903,0.003,1.730,0.1
+MSFT,ar,DSS-CC,0.900,0.897,0.003,2.739,1
+MSFT,transformer,Trail,0.900,0.711,0.189,4.800,
+MSFT,transformer,ACI,0.900,0.902,0.002,Inf,0.1
+MSFT,transformer,Quantile,0.900,0.899,0.001,4.923,0.5
+MSFT,transformer,PID,0.900,0.899,0.001,6.120,0.5
+MSFT,transformer,CPTC,0.900,0.837,0.063,13.919,0.1
+MSFT,transformer,DSS-CC,0.900,0.955,0.055,8.373,0.01
+MSFT,prophet,Trail,0.900,0.761,0.139,3.837,
+MSFT,prophet,ACI,0.900,0.902,0.002,Inf,0.1
+MSFT,prophet,Quantile,0.900,0.901,0.001,6.111,1
+MSFT,prophet,PID,0.900,0.901,0.001,5.133,0.5
+MSFT,prophet,CPTC,0.900,0.865,0.035,6.004,0.1
+MSFT,prophet,DSS-CC,0.900,0.926,0.026,4.493,0.01
+Elec2,theta,Trail,0.900,0.896,0.004,0.066,
+Elec2,theta,ACI,0.900,0.899,0.001,Inf,0.01
+Elec2,theta,Quantile,0.900,0.901,0.001,0.129,0.5
+Elec2,theta,PID,0.900,0.899,0.001,0.091,0.1
+Elec2,theta,CPTC,0.900,0.899,0.001,0.068,0.01
+Elec2,theta,DSS-CC,0.900,0.902,0.002,0.067,0.05
+Elec2,ar,Trail,0.900,0.894,0.006,0.088,
+Elec2,ar,ACI,0.900,0.900,0.000,Inf,0.1
+Elec2,ar,Quantile,0.900,0.900,0.000,0.095,0.1
+Elec2,ar,PID,0.900,0.900,0.000,0.126,0.1
+Elec2,ar,CPTC,0.900,0.900,0.000,0.110,0.05
+Elec2,ar,DSS-CC,0.900,0.903,0.003,0.097,0.1
+Elec2,transformer,Trail,0.900,0.885,0.015,0.465,
+Elec2,transformer,ACI,0.900,0.901,0.001,Inf,0.1
+Elec2,transformer,Quantile,0.900,0.900,0.000,0.435,0.5
+Elec2,transformer,PID,0.900,0.901,0.001,0.453,0.5
+Elec2,transformer,CPTC,0.900,0.899,0.001,0.416,0.1
+Elec2,transformer,DSS-CC,0.900,0.896,0.004,0.448,0.01
+Elec2,prophet,Trail,0.900,0.896,0.004,0.465,
+Elec2,prophet,ACI,0.900,0.901,0.001,Inf,0.1
+Elec2,prophet,Quantile,0.900,0.899,0.001,0.437,0.1
+Elec2,prophet,PID,0.900,0.900,0.000,0.645,1
+Elec2,prophet,CPTC,0.900,0.901,0.001,0.420,0.1
+Elec2,prophet,DSS-CC,0.900,0.898,0.002,0.421,0.01
+Elec2-intermittent,ar,Trail,0.900,0.905,0.005,0.465,
+Elec2-intermittent,ar,ACI,0.900,0.901,0.001,Inf,0.05
+Elec2-intermittent,ar,Quantile,0.900,0.901,0.001,0.420,0.5
+Elec2-intermittent,ar,PID,0.900,0.900,0.000,0.172,0.05
+Elec2-intermittent,ar,CPTC,0.900,0.899,0.001,0.412,0.1
+Elec2-intermittent,ar,DSS-CC,0.900,0.901,0.001,0.456,0.01
+Elec2-intermittent,transformer,Trail,0.900,0.908,0.008,0.465,
+Elec2-intermittent,transformer,ACI,0.900,0.901,0.001,Inf,0.1
+Elec2-intermittent,transformer,Quantile,0.900,0.901,0.001,0.399,0.5
+Elec2-intermittent,transformer,PID,0.900,0.900,0.000,0.172,0.05
+Elec2-intermittent,transformer,CPTC,0.900,0.918,0.018,0.529,0.005
+Elec2-intermittent,transformer,DSS-CC,0.900,0.921,0.021,0.369,0.01
+Daily Climate,theta,Trail,0.900,0.853,0.047,5.957,
+Daily Climate,theta,ACI,0.900,0.900,0.000,6.508,0.005
+Daily Climate,theta,Quantile,0.900,0.900,0.000,6.220,0.05
+Daily Climate,theta,PID,0.900,0.900,0.000,6.965,0.1
+Daily Climate,theta,CPTC,0.900,0.888,0.012,6.176,0.1
+Daily Climate,theta,DSS-CC,0.900,0.900,0.000,6.362,0.05
+Daily Climate,ar,Trail,0.900,0.883,0.017,5.153,
+Daily Climate,ar,ACI,0.900,0.900,0.000,Inf,0.01
+Daily Climate,ar,Quantile,0.900,0.900,0.000,13.569,1
+Daily Climate,ar,PID,0.900,0.900,0.000,14.211,1
+Daily Climate,ar,CPTC,0.900,0.896,0.004,5.368,0.1
+Daily Climate,ar,DSS-CC,0.900,0.900,0.000,5.665,0.1
+Daily Climate,transformer,Trail,0.900,0.719,0.181,8.786,
+Daily Climate,transformer,ACI,0.900,0.904,0.004,Inf,0.1
+Daily Climate,transformer,Quantile,0.900,0.900,0.000,15.106,0.5
+Daily Climate,transformer,PID,0.900,0.900,0.000,15.647,0.5
+Daily Climate,transformer,CPTC,0.900,0.857,0.043,24.618,0.1
+Daily Climate,transformer,DSS-CC,0.900,0.953,0.053,14.341,0.01
+Daily Climate,prophet,Trail,0.900,0.848,0.052,6.871,
+Daily Climate,prophet,ACI,0.900,0.901,0.001,Inf,0.1
+Daily Climate,prophet,Quantile,0.900,0.900,0.000,10.405,0.5
+Daily Climate,prophet,PID,0.900,0.900,0.000,6.991,0.1
+Daily Climate,prophet,CPTC,0.900,0.900,0.000,9.111,0.05
+Daily Climate,prophet,DSS-CC,0.900,0.908,0.008,7.614,0.01
+TX-COVID,CDC Forecaster,Trail,0.800,0.560,0.240,Inf,
+TX-COVID,CDC Forecaster,ACI,0.800,0.770,0.030,Inf,0.01
+TX-COVID,CDC Forecaster,Quantile,0.800,0.800,0.000,1461.073,1
+TX-COVID,CDC Forecaster,PID,0.800,0.780,0.020,651.937,0
+TX-COVID,CDC Forecaster,CPTC,0.800,0.750,0.050,555.501,0.0001
+TX-COVID,CDC Forecaster,DSS-CC,0.800,0.800,0.000,591.966,0.05
+Synthetic,synthetic,Trail,0.900,0.838,0.062,1.492,
+Synthetic,synthetic,ACI,0.900,0.900,0.000,Inf,0.1
+Synthetic,synthetic,Quantile,0.900,0.900,0.000,2.796,1
+Synthetic,synthetic,PID,0.900,0.900,0.000,1.549,0.1
+Synthetic,synthetic,CPTC,0.900,0.894,0.006,1.510,0.1
+Synthetic,synthetic,DSS-CC,0.900,0.907,0.007,2.439,1

@@ -1,0 +1,25 @@
+数据集,基础模型,方法,目标,覆盖率,覆盖误差,区间大小/阈值
+AMZN,ar,ACI,0.900,0.900,0.000,Inf
+AMZN,ar,PID,0.900,0.898,0.002,67.025
+AMZN,ar,DSS-CC,0.900,0.897,0.003,27.599
+GOOGL,ar,ACI,0.900,0.900,0.000,Inf
+GOOGL,ar,PID,0.900,0.898,0.002,45.309
+GOOGL,ar,DSS-CC,0.900,0.900,0.000,32.902
+MSFT,ar,ACI,0.900,0.900,0.000,Inf
+MSFT,ar,PID,0.900,0.900,0.000,5.854
+MSFT,ar,DSS-CC,0.900,0.897,0.003,2.739
+Elec2,ar,ACI,0.900,0.900,0.000,Inf
+Elec2,ar,PID,0.900,0.900,0.000,0.126
+Elec2,ar,DSS-CC,0.900,0.903,0.003,0.097
+Elec2-intermittent,ar,ACI,0.900,0.901,0.001,Inf
+Elec2-intermittent,ar,PID,0.900,0.900,0.000,0.172
+Elec2-intermittent,ar,DSS-CC,0.900,0.901,0.001,0.456
+Daily Climate,ar,ACI,0.900,0.900,0.000,Inf
+Daily Climate,ar,PID,0.900,0.900,0.000,14.211
+Daily Climate,ar,DSS-CC,0.900,0.900,0.000,5.665
+TX-COVID,CDC Forecaster,ACI,0.800,0.770,0.030,Inf
+TX-COVID,CDC Forecaster,PID,0.800,0.780,0.020,651.937
+TX-COVID,CDC Forecaster,DSS-CC,0.800,0.800,0.000,591.966
+Synthetic,synthetic,ACI,0.900,0.900,0.000,Inf
+Synthetic,synthetic,PID,0.900,0.900,0.000,1.549
+Synthetic,synthetic,DSS-CC,0.900,0.907,0.007,2.439

@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1080" viewBox="0 0 2200 1080">
+  <defs>
+    <style>
+      .title { font: 700 38px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #111827; }
+      .band-title { font: 700 28px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #374151; }
+      .label { font: 500 25px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #111827; }
+      .small { font: 500 21px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #111827; }
+      .math { font: italic 25px Georgia, "Times New Roman", serif; fill: #111827; }
+      .math-small { font: italic 22px Georgia, "Times New Roman", serif; fill: #111827; }
+      .formula { font: 500 21px "DejaVu Sans Mono", "Noto Sans Mono CJK SC", monospace; fill: #111827; }
+      .formula-small { font: 500 18px "DejaVu Sans Mono", "Noto Sans Mono CJK SC", monospace; fill: #111827; }
+      .green-title { font: 700 29px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #16803a; }
+      .blue-title { font: 700 29px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #1d4ed8; }
+      .green-text { font: 600 24px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #16803a; }
+      .blue-text { font: 600 24px "Noto Sans CJK SC", "Microsoft YaHei", Arial, sans-serif; fill: #1d4ed8; }
+      .box { fill: #ffffff; stroke: #6b7280; stroke-width: 3; }
+      .green-box { fill: #f0fdf4; stroke: #16803a; stroke-width: 3; }
+      .blue-box { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 3; }
+      .purple-box { fill: #faf5ff; stroke: #7c3aed; stroke-width: 3; }
+      .dashed { stroke-dasharray: 12 10; }
+      .arrow { stroke: #374151; stroke-width: 3.3; fill: none; marker-end: url(#arrow); }
+      .arrow-green { stroke: #16803a; stroke-width: 3.3; fill: none; marker-end: url(#arrow-green); }
+      .arrow-blue { stroke: #1d4ed8; stroke-width: 3.3; fill: none; marker-end: url(#arrow-blue); }
+      .arrow-purple { stroke: #7c3aed; stroke-width: 3.3; fill: none; marker-end: url(#arrow-purple); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#374151"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#16803a"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#1d4ed8"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#7c3aed"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="2200" height="1080" fill="#ffffff"/>
+  <text x="1100" y="48" text-anchor="middle" class="title">DSS-CC 在线保形校准框架</text>
+
+  <!-- Prediction band -->
+  <text x="80" y="92" class="band-title">预测阶段：在 <tspan class="math">y</tspan><tspan baseline-shift="sub" font-size="18">t</tspan> 到达前</text>
+  <line x1="40" y1="335" x2="2160" y2="335" stroke="#9ca3af" stroke-width="3" stroke-dasharray="14 12"/>
+
+  <rect x="70" y="125" width="365" height="160" rx="22" class="box"/>
+  <text x="252" y="162" text-anchor="middle" class="label">历史信息与基础预测</text>
+  <text x="96" y="238" class="math-small">y</text>
+  <text x="388" y="260" class="math-small">t</text>
+  <line x1="112" y1="253" x2="392" y2="253" stroke="#111827" stroke-width="3"/>
+  <line x1="112" y1="253" x2="112" y2="182" stroke="#111827" stroke-width="3"/>
+  <polyline points="122,236 150,204 184,218 218,190 254,210 290,184" stroke="#2563eb" stroke-width="6" fill="none"/>
+  <circle cx="122" cy="236" r="8" fill="#2563eb"/>
+  <circle cx="150" cy="204" r="8" fill="#2563eb"/>
+  <circle cx="184" cy="218" r="8" fill="#2563eb"/>
+  <circle cx="218" cy="190" r="8" fill="#2563eb"/>
+  <circle cx="254" cy="210" r="8" fill="#2563eb"/>
+  <circle cx="290" cy="184" r="8" fill="#2563eb"/>
+  <polyline points="290,184 328,200 365,176 402,198" stroke="#6b7280" stroke-width="4" fill="none" stroke-dasharray="10 8"/>
+  <circle cx="328" cy="200" r="7" fill="#6b7280"/>
+  <circle cx="365" cy="176" r="7" fill="#6b7280"/>
+
+  <path d="M435 205 L520 205" class="arrow"/>
+  <rect x="520" y="145" width="245" height="120" rx="22" class="box"/>
+  <text x="642" y="192" text-anchor="middle" class="label">当前阈值</text>
+  <text x="642" y="232" text-anchor="middle" class="math">q<tspan baseline-shift="sub" font-size="18">t</tspan></text>
+
+  <path d="M765 205 L850 205" class="arrow"/>
+  <rect x="850" y="125" width="330" height="160" rx="22" class="purple-box"/>
+  <text x="1015" y="162" text-anchor="middle" class="label">构造预测区间</text>
+  <text x="1015" y="198" text-anchor="middle" class="math">C<tspan baseline-shift="sub" font-size="18">t</tspan></text>
+  <line x1="902" y1="238" x2="1128" y2="238" stroke="#7c3aed" stroke-width="15" stroke-opacity="0.35"/>
+  <line x1="902" y1="218" x2="902" y2="258" stroke="#4b5563" stroke-width="3" stroke-dasharray="8 6"/>
+  <line x1="1128" y1="218" x2="1128" y2="258" stroke="#4b5563" stroke-width="3" stroke-dasharray="8 6"/>
+  <circle cx="1015" cy="238" r="13" fill="#6b7280" stroke="#ffffff" stroke-width="4"/>
+
+  <path d="M1180 205 L1265 205" class="arrow"/>
+  <rect x="1265" y="145" width="220" height="120" rx="22" class="box"/>
+  <text x="1375" y="217" text-anchor="middle" class="label">发布 <tspan class="math">C</tspan><tspan baseline-shift="sub" font-size="18">t</tspan></text>
+
+  <path d="M1375 265 C1375 308 1375 338 1375 380" class="arrow"/>
+  <rect x="1225" y="380" width="300" height="68" rx="18" class="box"/>
+  <text x="1375" y="423" text-anchor="middle" class="label">观测 <tspan class="math">y</tspan><tspan baseline-shift="sub" font-size="18">t</tspan> 到达</text>
+
+  <!-- Update band -->
+  <text x="80" y="382" class="band-title">更新阶段：观测 <tspan class="math">y</tspan><tspan baseline-shift="sub" font-size="18">t</tspan> 后</text>
+
+  <rect x="1005" y="470" width="210" height="66" rx="16" class="box"/>
+  <text x="1110" y="512" text-anchor="middle" class="label">观测 <tspan class="math">y</tspan><tspan baseline-shift="sub" font-size="18">t</tspan></text>
+  <rect x="1535" y="470" width="245" height="66" rx="16" class="box"/>
+  <text x="1658" y="512" text-anchor="middle" class="label">基础预测/区间</text>
+  <rect x="1255" y="490" width="300" height="94" rx="18" class="box"/>
+  <text x="1405" y="526" text-anchor="middle" class="label">计算分数</text>
+  <text x="1405" y="563" text-anchor="middle" class="math-small">s<tspan baseline-shift="sub" font-size="16">t</tspan> = S(x<tspan baseline-shift="sub" font-size="16">t</tspan>, y<tspan baseline-shift="sub" font-size="16">t</tspan>)</text>
+  <path d="M1375 448 C1375 462 1383 475 1393 490" class="arrow"/>
+  <path d="M1215 503 L1255 530" class="arrow"/>
+  <path d="M1535 503 L1555 528" class="arrow"/>
+
+  <!-- Green panel -->
+  <rect x="58" y="625" width="1015" height="325" rx="26" fill="#ffffff" stroke="#16803a" stroke-width="4"/>
+  <rect x="315" y="600" width="500" height="60" rx="20" class="green-box"/>
+  <text x="565" y="638" text-anchor="middle" class="green-title">状态空间前馈预测</text>
+
+  <rect x="100" y="705" width="150" height="72" rx="16" class="green-box"/>
+  <text x="175" y="751" text-anchor="middle" class="math">s<tspan baseline-shift="sub" font-size="18">t</tspan></text>
+  <path d="M1405 584 C1180 620 940 646 760 670 C540 700 365 728 250 741" class="arrow-green"/>
+
+  <path d="M250 741 L330 741" class="arrow-green"/>
+  <rect x="330" y="696" width="250" height="90" rx="16" class="green-box"/>
+  <text x="455" y="731" text-anchor="middle" class="green-text">对数变换</text>
+  <text x="455" y="765" text-anchor="middle" class="formula">uₜ = log(sₜ + ε)</text>
+
+  <path d="M580 741 L660 741" class="arrow-green"/>
+  <rect x="660" y="688" width="250" height="106" rx="16" class="green-box"/>
+  <text x="785" y="724" text-anchor="middle" class="green-text">Kalman 状态更新</text>
+  <line x1="695" y1="756" x2="875" y2="756" stroke="#4b5563" stroke-width="4"/>
+  <circle cx="715" cy="756" r="14" fill="#86efac" stroke="#166534" stroke-width="4"/>
+  <circle cx="770" cy="756" r="14" fill="#86efac" stroke="#166534" stroke-width="4"/>
+  <circle cx="825" cy="756" r="14" fill="#86efac" stroke="#166534" stroke-width="4"/>
+  <path d="M731 756 L754 756 M786 756 L809 756 M841 756 L864 756" class="arrow-green"/>
+
+  <path d="M910 741 L930 741" class="arrow-green"/>
+  <rect x="930" y="696" width="125" height="90" rx="16" class="green-box"/>
+  <text x="992" y="726" text-anchor="middle" class="green-text">前馈项</text>
+  <text x="992" y="758" text-anchor="middle" class="formula">gₜ₊₁</text>
+
+  <rect x="245" y="820" width="650" height="100" rx="18" fill="#f7fee7" stroke="#16803a" stroke-width="3" stroke-dasharray="13 9"/>
+  <text x="570" y="850" text-anchor="middle" class="green-text">状态空间模型 SSM</text>
+  <text x="570" y="882" text-anchor="middle" class="formula-small">xₜ₊₁ = A xₜ + wₜ,  wₜ ~ N(0,Q)</text>
+  <text x="570" y="912" text-anchor="middle" class="formula-small">uₜ = C xₜ + vₜ,  vₜ ~ N(0,R)</text>
+
+  <path d="M785 794 C800 842 830 860 860 860" class="arrow-green"/>
+  <rect x="860" y="823" width="195" height="74" rx="16" class="green-box"/>
+  <text x="958" y="854" text-anchor="middle" class="green-text">创新量</text>
+  <text x="958" y="883" text-anchor="middle" class="formula-small">κₜ = νₜ² / Sₜ</text>
+
+  <!-- Blue panel -->
+  <rect x="1170" y="625" width="970" height="325" rx="26" fill="#ffffff" stroke="#1d4ed8" stroke-width="4"/>
+  <rect x="1370" y="600" width="535" height="60" rx="20" class="blue-box"/>
+  <text x="1638" y="638" text-anchor="middle" class="blue-title">覆盖反馈与动态步长</text>
+
+  <rect x="1215" y="696" width="310" height="90" rx="16" class="blue-box"/>
+  <text x="1370" y="731" text-anchor="middle" class="blue-text">覆盖指示</text>
+  <text x="1370" y="765" text-anchor="middle" class="formula-small">cₜ = 1{sₜ ≤ qₜ}</text>
+  <path d="M1555 548 C1650 590 1580 660 1525 720" class="arrow-blue"/>
+  <rect x="1188" y="655" width="100" height="46" rx="13" class="blue-box"/>
+  <text x="1238" y="686" text-anchor="middle" class="math-small">q<tspan baseline-shift="sub" font-size="15">t</tspan></text>
+  <path d="M1288 678 L1333 696" class="arrow-blue"/>
+
+  <path d="M1525 741 L1595 741" class="arrow-blue"/>
+  <rect x="1595" y="696" width="210" height="90" rx="16" class="blue-box"/>
+  <text x="1700" y="732" text-anchor="middle" class="blue-text">反馈梯度</text>
+  <text x="1700" y="766" text-anchor="middle" class="math">G<tspan baseline-shift="sub" font-size="18">t</tspan></text>
+
+  <path d="M1055 860 C1240 855 1420 838 1520 814" class="arrow-blue"/>
+  <rect x="1520" y="812" width="220" height="76" rx="16" class="blue-box"/>
+  <text x="1630" y="846" text-anchor="middle" class="blue-text">动态步长</text>
+  <text x="1630" y="876" text-anchor="middle" class="math">η<tspan baseline-shift="sub" font-size="18">t</tspan></text>
+
+  <path d="M1700 786 C1735 805 1755 818 1780 836" class="arrow-blue"/>
+  <path d="M1740 850 L1780 850" class="arrow-blue"/>
+  <rect x="1780" y="804" width="310" height="92" rx="16" class="blue-box"/>
+  <text x="1935" y="837" text-anchor="middle" class="blue-text">反馈更新</text>
+  <text x="1935" y="873" text-anchor="middle" class="formula-small">zₜ₊₁ = zₜ - ηₜGₜ</text>
+
+  <path d="M1935 804 C1930 775 1930 755 1930 730" class="arrow-blue"/>
+  <rect x="1835" y="688" width="230" height="86" rx="16" class="blue-box"/>
+  <text x="1950" y="724" text-anchor="middle" class="blue-text">反馈修正</text>
+  <text x="1950" y="756" text-anchor="middle" class="math">z<tspan baseline-shift="sub" font-size="18">t+1</tspan></text>
+
+  <!-- Merge and loop -->
+  <rect x="750" y="984" width="750" height="72" rx="20" class="box"/>
+  <text x="1125" y="1028" text-anchor="middle" class="formula">下一阈值 qₜ₊₁ = clip(gₜ₊₁ + zₜ₊₁, 0, qₘₐₓ)</text>
+  <path d="M992 786 C1005 875 1055 930 1110 984" class="arrow-green"/>
+  <path d="M1950 774 C1900 930 1630 985 1500 1015" class="arrow-blue"/>
+  <path d="M750 1020 L30 1020 L30 92 L642 92 L642 145" stroke="#9ca3af" stroke-width="3.2" fill="none" marker-end="url(#arrow)" stroke-dasharray="12 8"/>
+  <text x="392" y="82" class="small" fill="#6b7280">下一时刻</text>
+</svg>
