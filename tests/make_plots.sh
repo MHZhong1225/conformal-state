@@ -17,27 +17,27 @@ for i in `find ./results -name '*.pkl'` ; do python base_plots.py $i & done
 # parser.add_argument('set_inset', help='Boolean for whether to plot inset for sets.', default=True, type=bool)
 
 # First set of inset plots compares ACI to Quantile tracker
-python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.1 --key2 DSS-CC --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50  --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.005 --key2 DSS-CC --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.1 --key2 DSS-CC --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.005 --key2 DSS-CC --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.1 --key2 DSS-CI --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50  --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.005 --key2 DSS-CI --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.1 --key2 DSS-CI --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 ACI --lr1 0.005 --key2 DSS-CI --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
 
 # For appendix, try comparing ACI (clipped) to Quantile tracker to see if it fixes the problem
-python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.1 --key2 DSS-CC --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50  --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.005 --key2 DSS-CC --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.1 --key2 DSS-CC --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
-python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.005 --key2 DSS-CC --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.1 --key2 DSS-CI --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50  --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.005 --key2 DSS-CI --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.1 --key2 DSS-CI --lr2 0.5 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
+python inset_plot.py --filename results/AMZN.pkl --key1 'ACI (clipped)' --lr1 0.005 --key2 DSS-CI --lr2 0.1 --window_length 400 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
 
 # Second set of inset plots compares Quantile tracker to Quantile+Integrator
-python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.1 --key2 'DSS-CC' --lr2 0.1 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
-python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.01 --key2 'DSS-CC' --lr2 0.01 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
-python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.1 --key2 'DSS-CC' --lr2 0.1 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50  &
-python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.01 --key2 'DSS-CC' --lr2 0.01 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
+python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.1 --key2 'DSS-CI' --lr2 0.1 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
+python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.01 --key2 'DSS-CI' --lr2 0.01 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --coverage_average_burnin 50 &
+python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.1 --key2 'DSS-CI' --lr2 0.1 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50  &
+python inset_plot.py --filename results/GOOGL.pkl --key1 Quantile --lr1 0.01 --key2 'DSS-CI' --lr2 0.01 --window_length 100 --window_start 2300 --window_loc 'upper left' --coverage_average_length 50 --set_inset --coverage_average_burnin 50 &
 
 # Finally, compare Quantile+Integrator to Quantile+Integrator+Scorecaster
-python inset_plot.py --filename results/elec2-intermittent.pkl --key1 ACI --lr1 0.1 --key2 'DSS-CC' --lr2 0.1 --window_length 100 --window_start 1500 --window_loc 'lower right' --coverage_average_length 50 --coverage_average_burnin 50 --set_inset &
-python inset_plot.py --filename results/ca-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CC' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
-python inset_plot.py --filename results/tx-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CC' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
-python inset_plot.py --filename results/fl-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CC' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
-python inset_plot.py --filename results/ga-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CC' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
-python inset_plot.py --filename results/ny-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CC' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
+python inset_plot.py --filename results/elec2-intermittent.pkl --key1 ACI --lr1 0.1 --key2 'DSS-CI' --lr2 0.1 --window_length 100 --window_start 1500 --window_loc 'lower right' --coverage_average_length 50 --coverage_average_burnin 50 --set_inset &
+python inset_plot.py --filename results/ca-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CI' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
+python inset_plot.py --filename results/tx-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CI' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
+python inset_plot.py --filename results/fl-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CI' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
+python inset_plot.py --filename results/ga-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CI' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &
+python inset_plot.py --filename results/ny-COVID-deaths-4wk.pkl --key1 Quantile --lr1 0 --key2 'DSS-CI' --lr2 0.1 --window_length 15 --window_start 5 --window_loc 'upper right' --coverage_average_length 10 --miscoverage_scatterplot &

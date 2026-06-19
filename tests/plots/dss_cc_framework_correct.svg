@@ -38,7 +38,7 @@
   </defs>
 
   <rect x="0" y="0" width="2200" height="1080" fill="#ffffff"/>
-  <text x="1100" y="48" text-anchor="middle" class="title">DSS-CC 在线保形校准框架</text>
+  <text x="1100" y="48" text-anchor="middle" class="title">DSS-CI 在线保形校准框架</text>
 
   <!-- Prediction band -->
   <text x="80" y="92" class="band-title">预测阶段：在 <tspan class="math">y</tspan><tspan baseline-shift="sub" font-size="18">t</tspan> 到达前</text>

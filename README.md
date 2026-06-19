@@ -1,8 +1,8 @@
 # Conformal Time Series
 
-Code for **Dynamic State-Space Conformal Control (DSS-CC)**, an online conformal calibration method for time-series prediction intervals under nonstationarity.
+Code for **Dynamic State-Space Conformal Control (DSS-CI)**, an online conformal calibration method for time-series prediction intervals under nonstationarity.
 
-DSS-CC decomposes the conformal threshold into:
+DSS-CI decomposes the conformal threshold into:
 
 - a state-space feedforward term that predicts the future scale of nonconformity scores;
 - a coverage-feedback correction term that maintains calibration;
@@ -15,7 +15,7 @@ The repository contains the method implementation, baseline conformal controller
 ```text
 .
 |-- core/
-|   |-- methods.py          # Baselines and DSS-CC experiment implementation
+|   |-- methods.py          # Baselines and DSS-CI experiment implementation
 |   |-- state_space.py      # 1D Kalman filter and numerical helpers
 |   |-- model_scores.py     # Forecast generation with Darts models
 |   |-- quantile.py         # Weighted conformal utilities
@@ -28,7 +28,7 @@ The repository contains the method implementation, baseline conformal controller
 |   |-- datasets/           # Data used by the experiment runner
 |   |-- results/            # Pickled experiment outputs
 |   `-- plots/              # Generated figures and LaTeX tables
-|-- css.py                  # Standalone DSS-CC class-style prototype
+|-- css.py                  # Standalone DSS-CI class-style prototype
 |-- requirements.txt
 `-- README.md
 ```
@@ -51,7 +51,7 @@ Some forecast models, especially `TransformerModel` from Darts, may require PyTo
 
 ## Method Implementation
 
-The main experiment-facing DSS-CC function is:
+The main experiment-facing DSS-CI function is:
 
 ```python
 from core import dss_cc
@@ -101,8 +101,8 @@ tests/results/GOOGL.pkl
 To rerun only selected methods, pass a comma-separated overwrite list:
 
 ```bash
-python3 base_test.py configs/GOOGL.yaml DSS-CC
-python3 base_test.py configs/GOOGL.yaml "Quantile,DSS-CC"
+python3 base_test.py configs/GOOGL.yaml DSS-CI
+python3 base_test.py configs/GOOGL.yaml "Quantile,DSS-CI"
 ```
 
 ### All Configured Experiments
@@ -123,7 +123,7 @@ Experiment settings live in `tests/configs/*.yaml`. Each config defines:
 - target miscoverage `alpha`;
 - burn-in length `T_burnin`;
 - learning-rate grids for each method;
-- DSS-CC parameters, including `eta_min`, `eta_max`, `q_max`, and Kalman parameters.
+- DSS-CI parameters, including `eta_min`, `eta_max`, `q_max`, and Kalman parameters.
 
 Representative configs:
 
@@ -157,7 +157,7 @@ You can also run a single pairwise plot manually, for example:
 python3 inset_plot.py \
   --filename results/GOOGL.pkl \
   --key1 Quantile --lr1 0.1 \
-  --key2 DSS-CC --lr2 0.1 \
+  --key2 DSS-CI --lr2 0.1 \
   --window_length 100 \
   --window_start 2300 \
   --window_loc "upper left" \
@@ -178,13 +178,11 @@ The experiment runner currently includes:
 - trailing-window empirical quantile;
 - Adaptive Conformal Inference (ACI);
 - clipped ACI;
-- quantile control;
-- quantile plus integrator;
 - quantile plus integrator plus scorecaster, labeled as conformal PID in plots;
 - CPTC;
-- DSS-CC.
+- DSS-CI.
 
-Most baselines and DSS-CC are implemented in `core/methods.py`.
+Most baselines and DSS-CI are implemented in `core/methods.py`.
 
 ## Notes on Reproducibility
 
@@ -193,12 +191,3 @@ Most baselines and DSS-CC are implemented in `core/methods.py`.
 - Transformer results may vary across hardware, PyTorch versions, and random initialization.
 - Some scripts use `python`; if your environment only exposes `python3`, either invoke the scripts with `python3` directly or create a `python` alias inside your virtual environment.
 
-## Citation
-
-If you use this repository, please cite the accompanying method paper:
-
-```text
-Learning to Calibrate Time-Varying Uncertainty with Anticipatory State-Space Conformal Control.
-```
-
-Replace this placeholder with the final bibliographic entry once available.

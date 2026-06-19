@@ -73,7 +73,7 @@ if __name__ == "__main__":
         # 'Quantile+Integrator (log)': 'Conformal PI',
         'Quantile+Integrator (log)+Scorecaster': 'Conformal PID',
         'CPTC': 'CPTC',
-        'DSS-CC': 'Ours'
+        'DSS-CI': 'Ours'
     }
 
     for model_name in model_names:

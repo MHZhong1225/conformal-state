@@ -114,7 +114,7 @@ if __name__ == "__main__":
                 fn = quantile_integrator_log
             elif method == "Quantile+Integrator (log)+Scorecaster":
                 fn = quantile_integrator_log_scorecaster
-            elif method == "DSS-CC":
+            elif method == "DSS-CI":
                 fn = dss_cc
                 # args['methods'][method]['lrs'] = [None]
             elif method == "CPTC":

@@ -225,7 +225,7 @@ if __name__ == '__main__':
         'Quantile': 'Conformal P Control' if args.lr1 != 0 else 'Base Forecaster',
         'Quantile+Integrator (log)': 'Conformal PI Control',
         'Quantile+Integrator (log)+Scorecaster': 'Conformal PID Control',
-        'DSS-CC': 'Ours'
+        'DSS-CI': 'Ours'
     }
 
     args.window_start = args.window_start if args.window_start is not None else -args.window_length

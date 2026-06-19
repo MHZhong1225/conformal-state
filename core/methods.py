@@ -400,7 +400,7 @@ def dss_cc(
         #     print("t", t, "q_mean", qs[max(0,t-200):t].mean(), "q_min", qs[:t].min(), "q_max", qs[:t].max(),
         #         "cvg_recent", covereds[max(0,t-200):t].mean(), "eta", etas[t])
     return {
-        "method": "DSS-CC",
+        "method": "DSS-CI",
         "q": qs,
         "eta": etas,
         "kappa": kappas,
